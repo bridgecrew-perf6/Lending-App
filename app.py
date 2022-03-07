@@ -18,8 +18,10 @@ from sqlalchemy_utils import database_exists, create_database
 from flask import Flask, jsonify
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://postgres:{password}@localhost:5432/project4'
-sql = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
 
 # Creating Engine
 engine = create_engine(f"postgresql://postgres:{password}@localhost:5432/project4")
