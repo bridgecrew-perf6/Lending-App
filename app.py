@@ -3,6 +3,7 @@ import numpy as np
 import sqlalchemy
 import csv
 import time
+import os
 import pickle
 from config import password
 from decimal import Decimal
@@ -18,21 +19,22 @@ from sqlalchemy_utils import database_exists, create_database
 from flask import Flask, jsonify
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-SECRET_KEY = os.environ.get('SECRET_KEY')
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://bcrtabifqkbbxq:26c92615b61ba594bca9d61dda9ab6a99afc33c8a3f49812c0b204235f620885@ec2-34-231-183-74.compute-1.amazonaws.com:5432/d6qu367ljpm9rp')
 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 # Creating Engine
 engine = create_engine(f"postgresql://postgres:{password}@localhost:5432/project4")
 if not database_exists(engine.url):
     create_database(engine.url)
-
 # reflecting database
 Base = automap_base()
 
 # reflecting tables
 Base.prepare(engine, reflect=True)
+
 
 # Load ML model
 model = pickle.load(open('model.pkl', 'rb')) 
