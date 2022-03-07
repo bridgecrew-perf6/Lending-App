@@ -22,9 +22,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
 sql = SQLAlchemy(app)
 
 # Creating Engine
-engine = create_engine(f"postgresql://postgres:{password}@localhost:5432/project4")
-if not database_exists(engine.url):
-    create_database(engine.url)
+Grade = create_classes(db)
 
 # reflecting database
 Base = automap_base()
